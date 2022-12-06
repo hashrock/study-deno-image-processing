@@ -1,10 +1,9 @@
 import Psd from "npm:@webtoon/psd";
-import { Image } from "https://deno.land/x/imagescript@v1.2.14/mod.ts";
+import { Image, decode } from "https://deno.land/x/imagescript@v1.2.14/mod.ts";
 const result = Deno.readFileSync("example.psd");
 const psdFile = Psd.parse(result.buffer);
 const raw = await psdFile.composite();
-const img = new Image(psdFile.width, psdFile.height);
-img.bitmap = raw;
+const img = await decode(raw);
 await Deno.writeFile("out.png", await img.encode());
 
 psdFile.layers.forEach(async (layer) => {
